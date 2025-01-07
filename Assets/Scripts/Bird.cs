@@ -16,6 +16,10 @@ public class Bird : MonoBehaviour
     private float maxTiltAngle = 30f; // Maximum tilt angle (positive for up, negative for down)
     private float tiltSmoothness = 5f; // Smoothness of the tilt effect
 
+    // Audio
+    public AudioSource collisionAudioSource;  // Reference to the AudioSource component for collision sound
+    public AudioClip collisionSound;          // AudioClip for collision sound
+
     // Start is called before the first frame update
     void Start()
     {
@@ -64,6 +68,12 @@ public class Bird : MonoBehaviour
         if (animator != null)
         {
             animator.SetTrigger("Hit");
+        }
+
+        // Play collision sound
+        if (collisionAudioSource != null && collisionSound != null)
+        {
+            collisionAudioSource.PlayOneShot(collisionSound); // Play sound once
         }
 
         // Stop the game when the bird collides with anything

@@ -23,6 +23,10 @@ public class GameManager : MonoBehaviour
     private bool gameStarted = false; // Flag to track if the game has started
     public bool gameStopped = false; // Flag to track if the game is stopped
 
+    // Audio
+    public AudioSource gameOverAudioSource; // Reference to the AudioSource for the game over sound
+    public AudioClip gameOverSound; // AudioClip for the game over sound
+
     // Start is called before the first frame update
     void Start()
     {
@@ -102,6 +106,12 @@ public class GameManager : MonoBehaviour
         if (backgroundScript != null)
         {
             backgroundScript.StopBackground();
+        }
+
+        // Play the game over sound
+        if (gameOverAudioSource != null && gameOverSound != null)
+        {
+            gameOverAudioSource.PlayOneShot(gameOverSound); // Play the game over sound once
         }
 
         // Check and update best score
