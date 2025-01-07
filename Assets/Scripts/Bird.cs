@@ -5,11 +5,12 @@ using UnityEngine;
 public class Bird : MonoBehaviour
 {
     private GameManager gameManager;
-    private Rigidbody2D rb; // Rigidbody2D reference
+    public Rigidbody2D rb; // Rigidbody2D reference
     private float jumpForce = 8f; // Adjust this to control the jump height
     private float pushForce = 5f; // Force to push the bird to the right
     private Animator animator;
     private bool isStopped = false;
+    private bool impulsed = false;
 
     // Rotation values for tilt effect
     private float maxTiltAngle = 30f; // Maximum tilt angle (positive for up, negative for down)
@@ -23,7 +24,7 @@ public class Bird : MonoBehaviour
         {
             Debug.LogError("Animator component not found on " + gameObject.name);
         }
-    
+
         // Find the GameManager (you can also set this from the inspector if desired)
         gameManager = FindObjectOfType<GameManager>();
 
@@ -31,12 +32,15 @@ public class Bird : MonoBehaviour
 
         // Freeze the X position so the bird cannot move horizontally
         rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+
+        // Disable gravity at the start of the game
+        rb.simulated = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Apply upward force when the spacebar is pressed and the game isn't stopped
+        // Start the game when spacebar is pressed and game is not stopped
         if (Input.GetKeyDown(KeyCode.Space) && !isStopped)
         {
             // Apply an upward force on the Y-axis
@@ -79,11 +83,16 @@ public class Bird : MonoBehaviour
     // Function to push the bird to the right with a small force
     public void PushBirdToRight()
     {
-        // Reset the bird's velocity to prevent interference from other forces
-        rb.velocity = new Vector2(0, rb.velocity.y); // Keep the Y velocity, set X to 0
+        if(!impulsed)
+        {
+            // Reset the bird's velocity to prevent interference from other forces
+            rb.velocity = new Vector2(0, rb.velocity.y); // Keep the Y velocity, set X to 0
 
-        // Apply a one-time, small impulse force to the right
-        rb.AddForce(Vector2.right * pushForce, ForceMode2D.Impulse);
+            // Apply a one-time, small impulse force to the right
+            rb.AddForce(Vector2.right * pushForce, ForceMode2D.Impulse);
+
+            impulsed = true;
+        }
     }
 
     // Function to apply tilt effect based on the bird's vertical velocity (going up or down)

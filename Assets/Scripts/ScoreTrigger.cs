@@ -9,7 +9,7 @@ public class ScoreTrigger : MonoBehaviour
     // Trigger the event when the bird passes through
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("Bird"))
+        if (collision.CompareTag("Bird") && !gameManager.gameStopped)
         {
             // Add points when the bird passes through the gap
             gameManager.UpdateScore(1);

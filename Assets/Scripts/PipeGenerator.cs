@@ -11,7 +11,7 @@ public class PipeGenerator : MonoBehaviour
     public float maxY = 3f; // Maximum Y position for pipe
     private bool isStopped = false; // To control pipe generation
 
-    private void Start()
+    public void StartGenerating()
     {
         // Start generating pipes
         StartCoroutine(GeneratePipes());
